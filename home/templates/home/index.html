@@ -1,0 +1,59 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+  <h3 class='text-center'>TSP Solver By Imiza</h3>
+  <hr>
+  
+    <div class='row'>
+      <div class='col-sm-6'>
+        <div class="card" style="width: 38rem;">
+          <img class="card-img-top" src="{% static "home/images/add_location.jpg" %}" alt="Location">
+          <div class="card-body">
+            <h5 class="card-title">Add Customer</h5>
+            <p class="card-text">Here You can add new locations to use in your TSP sessions later. only the latitude and longitude of the locations is neede</p>
+            <a href="{% url 'home:add_customer' %}" class="btn btn-outline-primary col-md-4 offset-lg-4">Add</a>
+          </div>
+        </div>
+      </div>
+      <div class='col-sm-6'>
+        <div class="card" style="width: 38rem;">
+          <img class="card-img-top" src="{% static "home/images/add_session.jpg" %}" alt="Session">
+          <div class="card-body">
+            <h5 class="card-title">Add Session</h5>
+            <p class="card-text">Create diffrent sessions including as many locations needed and see the TSP answer anytime.</p>
+            <a href="{% url 'home:add_session' %}" class="btn btn-outline-primary col-md-4 offset-lg-4">Add</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class='row'>
+      <div class='col-sm-6'>
+        <div class="card bg-dark text-white" style="width: 38rem;">
+          <div class="card-body">
+            <h5 class="card-title">All Customers</h5>
+            {% for customer in customers %}
+              <a href="{% url 'home:customer_detail' customer.id%}" class="btn btn-outline-light col-md-4 offset-lg-4 text-white">{{customer.name}}</a>
+              <hr>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class='col-sm-6'>
+        <div class="card bg-dark text-white" style="width: 38rem;">
+          <div class="card-body">
+            <h5 class="card-title">All Sessions</h5>
+            {% for session in sessions %}
+              <a href="{% url 'home:session_detail' session.id %}" class="btn btn-outline-light col-md-4 offset-lg-4 text-white">{{session.name}}</a>
+              <hr>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <a href='{% url 'home:location_list' %}'>Locations</a>
+    <a href='{% url 'home:session_list' %}'>Sessions</a>
+    <a href='{% url 'home:customer_list' %}'>Customers</a>
+{% endblock content %}

@@ -1,0 +1,52 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <h3 class='text-center'>Most officient Route is the following:</h3>
+    <hr>
+    {% for r in ordered_route %}
+        <h4 class='text-center'>{{ r }}</h4> 
+    {% endfor %}
+    <hr>
+    <div align="center">
+        <div id="map"></div>
+        <!-- Leaflet JavaScript -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <!-- Embed for_map data using json_script -->
+        {{ for_map|json_script:"for-map-data" }}
+
+        <script>
+            // Retrieve the for_map data from the script tag
+            const forMap = JSON.parse(document.getElementById('for-map-data').textContent);
+            console.log(forMap); // Debugging: Log the data
+
+            // Initialize the map
+            const map = L.map('map').setView([35.700632516074336, 51.36108739655893], 10); // Set initial view (latitude, longitude, zoom level)
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Add markers for each location
+            forMap.forEach(loc => {
+                console.log(`Adding marker at ${loc.lat}, ${loc.lng}`); // Debugging: Log each marker
+                L.marker([loc.lat, loc.lng])
+                    .addTo(map)
+                    .bindPopup(loc.name); // Add a popup with the location name
+            });
+        </script>
+    </div>
+    <hr>
+    <div align="center">
+        <b>Location Number Guid:</b>
+        <br>
+        {% for l in for_map %}
+            <span><b>{{ forloop.counter }}:</b> {{ l.name }}, </span> 
+        {% endfor %}
+    </div>
+{% endblock content %}
+
+
+

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h3>{{ session.name }}</h3>
+    <a href='{% url 'home:session_edit' session.id %}' class='btn btn-primary btn-md'>Edit</a> 
+    <a href='{% url 'home:session_delete' session.id %}' class='btn btn-danger btn-md'>Delete</a> 
+    <hr>
+    {% for location in customers %}
+        {{ forloop.counter }}: {{ location.name }}
+        <br>
+    {% endfor %}
+    <a href="{% url 'home:session_calculation' session.id %}" class="btn btn-dark col-md-4 offset-lg-4">TSP Answer</a>
+{% endblock content %}

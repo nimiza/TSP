@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3 class='text-center'>Add Location</h3>
+    <hr>
+
+    <form acion='' method='POST' class='col-md-2 offset-lg-5' novalidate>
+        <div class='row'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <span class="input-group-btn">
+                <input class="btn btn-outline-success col-md-4 offset-lg-4" type="submit" value="Submit">
+            </span>
+        </div>
+    </form>
+{% endblock content %}

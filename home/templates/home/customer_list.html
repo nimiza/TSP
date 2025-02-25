@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+{% for cus in customers %}
+    <a href='{% url 'home:customer_detail' cus.id %}'>{{ cus.name }}</a>
+    <hr>
+{% endfor %}
+{% endblock content %}

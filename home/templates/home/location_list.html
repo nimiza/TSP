@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+{% for loc in locations %}
+    <a href='{% url 'home:location_detail' loc.id %}'>{{ loc.name }}</a>
+    <hr>
+{% endfor %}
+{% endblock content %}
