@@ -22,7 +22,7 @@
             console.log(forMap); // Debugging: Log the data
 
             // Initialize the map
-            const map = L.map('map').setView([35.700632516074336, 51.36108739655893], 10); // Set initial view (latitude, longitude, zoom level)
+            const map = L.map('map').setView([36.322217000498554, 59.57129235510297], 11); // Set initial view (latitude, longitude, zoom level)
 
             // Add OpenStreetMap tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -30,11 +30,11 @@
             }).addTo(map);
 
             // Add markers for each location
-            forMap.forEach(loc => {
+            forMap.forEach((loc, index)=> {
                 console.log(`Adding marker at ${loc.lat}, ${loc.lng}`); // Debugging: Log each marker
                 L.marker([loc.lat, loc.lng])
                     .addTo(map)
-                    .bindPopup(loc.name); // Add a popup with the location name
+                    .bindTooltip(`${index + 1}. ${loc.name}`, { permanent: true, direction: 'top' });
             });
         </script>
     </div>

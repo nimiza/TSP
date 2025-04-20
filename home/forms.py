@@ -2,6 +2,7 @@ from django import forms
 from .models import Location, Session, Customer
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django_select2.forms import Select2MultipleWidget
 
 
 class UserLoginForm(forms.Form):
@@ -16,8 +17,8 @@ class LocationCreateEditForm(forms.Form):
 class CustomerCreateForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Name of Your location'}))
     shop_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Name of Your location'}))
-    # address = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Name of Your location'}))
-    lat_lon = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'00.000000, 00.000000'}), label='Latitude, Longitude')
+    latitude = forms.FloatField(widget=forms.HiddenInput)
+    longitude = forms.FloatField(widget=forms.HiddenInput)
 
 
 class CustomerEditForm(forms.ModelForm):
@@ -39,16 +40,22 @@ class CustomerEditForm(forms.ModelForm):
         }
 
 class SessionCreateEditForm(forms.ModelForm):
+
+    customer = forms.ModelMultipleChoiceField(queryset=Customer.objects.all(), widget=Select2MultipleWidget(attrs={'class': 'form-control select2', 'data-placeholder': 'Select Customers...'}), required=True)
+
     class Meta():
         model = Session
         fields = [
             'name', 'customer'
         ]
+
+
         widgets = {
             'name': forms.TextInput(attrs={'class':'form-control', 'placeholder':'Name of Your session'}),
-            'customer': forms.CheckboxSelectMultiple(attrs={'class':'check-input'}),
-
         }
+
+        # customer = forms.ModelMultipleChoiceField(queryset=Customer.objects.all())
+        # widget = forms.SelectMultiple(attrs={'class': 'select2'})
 
 
 class UserRegistrationForm(forms.Form):

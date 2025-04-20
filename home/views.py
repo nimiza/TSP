@@ -10,7 +10,7 @@ from django.db import IntegrityError
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from requests.exceptions import RequestException
+from requests.exceptions import RequestException, SSLError
 # Create your views here.
 
 
@@ -133,17 +133,18 @@ class AddCustomerView(LoginRequiredMixin, View):
     
     def post(self, request, *args, **kwargs):
         form = self.class_form(request.POST)
+        print(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             name = cd['name']
-            latitude = cd['lat_lon'].split(', ')[0]
-            longitude = cd['lat_lon'].split(', ')[1]
+            latitude = cd['latitude']
+            longitude = cd['longitude']
             shop_name = cd['shop_name']
             try:
                 address = neshan_cor_addr(lat=latitude, lon=longitude)
             except requests.exceptions.RequestException:
                 address = 'Null'
-                messages.error(request, '''Due to connection Failure, default address set to 'Null'! ''', 'danger')
+                messages.error(request, '''Due to connection Failure, default address was set to 'Null'! ''', 'warning')
             try:
                 Customer.objects.create(name=name, latitude=latitude, longitude=longitude, shop_name=shop_name, address=address)
                 messages.success(request, f'{name} created successfully!')
@@ -319,8 +320,12 @@ class SessionCalculationView(LoginRequiredMixin, View):
             print(list)
             print(f'YOURS: {string}')
             # string is the desired format "END"
-
-            distances_matrix = neshan_distance_matrix(string)
+            
+            try:
+                distances_matrix = neshan_distance_matrix(string)
+            except SSLError:
+                messages.error(request, '''Couldn't Stablish Connection with Neshan!''', 'warning')
+                return redirect('home:home')
             print(distances_matrix)
             distances = np.array(distances_matrix)
             n = len(distances)
